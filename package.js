@@ -1,7 +1,7 @@
 Package.describe({
   name: 'liberation:flash-telegrams',
   summary: 'Package for instant messaging between registered users.',
-  version: '1.0.0',
+  version: '1.1.0',
   git: 'https://github.com/dolgarev/flash-telegrams.git'
 });
 
