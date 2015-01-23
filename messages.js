@@ -1,6 +1,7 @@
 FlashTelegrams = {
-  sendMessage: function(recepient, message, style, options) {
-    var sender = Meteor.userId();
+  sendMessage: function(recepients, message, style, options) {
+    var sender = Meteor.userId(),
+        users;
     
     if (sender) {
       options = options || {};
@@ -8,48 +9,61 @@ FlashTelegrams = {
       options.hideDelay = options.hideDelay || this.options.hideDelay;
 
       if (_.isString(options.hideDelay) && options.hideDelay.substr(-1) === 's') {
-          options.hideDelay = parseInt(options.hideDelay, 10) * 1000;
+        options.hideDelay = parseInt(options.hideDelay, 10) * 1000;
       }
 
       if (style === void 0) {
         style = this.cssClasses[this.options.defaultStyle] || '';
       }
 
-      flashTelegrams.insert({
+      var insertMessageHandler = function(recepient) {
+        flashTelegrams.insert({
           message: message, 
           style: style, 
           seen: false, 
           options: options,
-          recepient: recepient || sender,
+          recepient: (recepient && recepient._id ? recepient._id : recepient) || sender,
           sender: sender,
           created_at: Date.now()
-      });  
+        });  
+      } 
+
+      if (recepients === '*') {
+        Meteor.users.find({
+          '_id': {$ne: sender}
+        }, {
+          'fields': {'_id': 1}
+        }).forEach(insertMessageHandler);
+      }
+      else {
+        _.each(_.isArray(recepients) ? recepients : [recepients], insertMessageHandler);
+      }
     }
   },
   sendLocalMessage: function(message, style, options) {
     this.sendMessage(Meteor.userId(), message, style, options);  
   },
   // Deprecated, use sendWarning instead. sendWarning is more consistent with Boostrap classes.
-  sendAlert: function(message, options, recepient) {
-    options = _.isString(options) ? (recepient = options, null) : options;
-    this.sendMessage(recepient, message, this.cssClasses.alert, options);
+  sendAlert: function(message, options, recepients) {
+    options = _.isString(options) || _.isArray(options) ? (recepients = options, null) : options;
+    this.sendMessage(recepients, message, this.cssClasses.alert, options);
     console.log('Deprecated, use sendWarning instead of sendAlert');
   },
-  sendWarning: function(message, options, recepient) {
-    options = _.isString(options) ? (recepient = options, null) : options;
-    this.sendMessage(recepient, message, this.cssClasses.warning, options);
+  sendWarning: function(message, options, recepients) {
+    options = _.isString(options) || _.isArray(options) ? (recepients = options, null) : options;
+    this.sendMessage(recepients, message, this.cssClasses.warning, options);
   },
-  sendError: function(message, options, recepient) {
-    options = _.isString(options) ? (recepient = options, null) : options;
-    this.sendMessage(recepient, message, this.cssClasses.error, options);
+  sendError: function(message, options, recepients) {
+    options = _.isString(options) || _.isArray(options) ? (recepients = options, null) : options;
+    this.sendMessage(recepients, message, this.cssClasses.error, options);
   },
-  sendSuccess: function(message, options, recepient) {
-    options = _.isString(options) ? (recepient = options, null) : options;
-    this.sendMessage(recepient, message, this.cssClasses.success, options);
+  sendSuccess: function(message, options, recepients) {
+    options = _.isString(options) || _.isArray(options) ? (recepients = options, null) : options;
+    this.sendMessage(recepients, message, this.cssClasses.success, options);
   },
-  sendInfo: function(message, options, recepient) {
-    options = _.isString(options) ? (recepient = options, null) : options;
-    this.sendMessage(recepient, message, this.cssClasses.info, options);
+  sendInfo: function(message, options, recepients) {
+    options = _.isString(options) || _.isArray(options) ? (recepients = options, null) : options;
+    this.sendMessage(recepients, message, this.cssClasses.info, options);
   },
   clear: function() {
     flashTelegrams.remove({
