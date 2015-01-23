@@ -12,14 +12,14 @@ Include the template somewhere in your index.html file:
 ```
 And then send messages:
 ```javascript
-  FlashTelegrams.sendWarning("Message", <options>, <user_id>);
-  FlashTelegrams.sendWarning("Message", <user_id>);
-  FlashTelegrams.sendError("Message", <options>, <user_id>);
-  FlashTelegrams.sendError("Message", <user_id>);
-  FlashTelegrams.sendSuccess("Message", <options>, <user_id>);
-  FlashTelegrams.sendSuccess("Message", <user_id>);
-  FlashTelegrams.sendInfo("Message", <options>, <user_id>);
-  FlashTelegrams.sendInfo("Message", <user_id>);
+  FlashTelegrams.sendWarning("Message", <options>, <user_id|[user_id1, user_id2,...]|'*'>);
+  FlashTelegrams.sendWarning("Message", <user_id|[user_id1, user_id2,...]|'*'>);
+  FlashTelegrams.sendError("Message", <options>, <user_id|[user_id1, user_id2,...]|'*'>);
+  FlashTelegrams.sendError("Message", <user_id|[user_id1, user_id2,...]|'*'>);
+  FlashTelegrams.sendSuccess("Message", <options>, <user_id|[user_id1, user_id2,...]|'*'>);
+  FlashTelegrams.sendSuccess("Message", <user_id|[user_id1, user_id2,...]|'*'>);
+  FlashTelegrams.sendInfo("Message", <options>, <user_id|[user_id1, user_id2,...]|'*'>);
+  FlashTelegrams.sendInfo("Message", <user_id|[user_id1, user_id2,...]|'*'>);
   FlashTelegrams.sendLocalMessage("Message", <style>, <options>);
 ```
 
