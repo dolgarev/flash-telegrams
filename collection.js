@@ -2,15 +2,16 @@ flashTelegrams = new Meteor.Collection('flash_telegrams');
 
 if (Meteor.isServer) {
   flashTelegrams.allow({
-    insert: function(userId) {
-      return userId === Meteor.userId();
+    insert: function(userId, doc) {
+      return userId === doc.sender;
     },
-    update: function(userId) {      
-      return userId === Meteor.userId();
+    update: function(userId, doc) {      
+      return userId === doc.recepient || userId === doc.sender;
     },
-    remove: function(userId) {
-      return userId === Meteor.userId();
-    }
+    remove: function(userId, doc) {
+      return userId === doc.recepient;
+    },
+    fetch: ['recepient', 'sender']
   });
 
   Meteor.publish("flash_telegrams", function() {

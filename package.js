@@ -12,7 +12,7 @@ Package.onUse(function(api) {
   api.add_files(['collection.js'], 'server');
 
   if (api.export) {
-    api.export(['FlashTelegrams', 'flashTelegrams'], 'client');
+    api.export(['FlashTelegrams'], 'client');
     api.export(['flashTelegrams'], 'server');
   }
 });

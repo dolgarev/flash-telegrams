@@ -1,7 +1,6 @@
 FlashTelegrams = {
   sendMessage: function(recepients, message, style, options) {
-    var sender = Meteor.userId(),
-        users;
+    var sender = Meteor.userId();
     
     if (sender) {
       options = options || {};
